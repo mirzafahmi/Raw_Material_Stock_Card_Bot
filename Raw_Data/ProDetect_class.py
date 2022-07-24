@@ -24,16 +24,11 @@ class ProDetect:
         adjusted_columns_name = product_cassette_raw.iloc[8]
 
         #renaming the blank columns due to multi-index column
+        adjusted_columns_name[1] = "Caps Received"
         adjusted_columns_name[2] = "Caps Issue"
+        adjusted_columns_name[4] = "Panels Received"
         adjusted_columns_name[5] = "Panels Issue"
         product_cassette.columns = adjusted_columns_name
-
-        #rename the column as there are multi index column
-        product_cassette.rename(columns = {'Caps':'Caps Received'}, inplace = True)
-        product_cassette.rename(columns = {'Panel':'Panels Received'}, inplace = True)
-
-
-        #def potential_produced_product():
 
         #create variable
         product_tests_per_box = self.tests_per_box
@@ -46,7 +41,7 @@ class ProDetect:
         potential_produced_product_by_cap = product_cassette["Caps Received"].iloc[-1] / product_tests_per_box
         potential_produced_product_by_panel = product_cassette["Panels Received"].iloc[-1] / product_tests_per_box
 
-        potential_produced_product_raw_materials = {"potential_produced_product_by_uncut_sheet" : potential_produced_product_by_uncut_sheet, "potential_produced_product_by_cap": potential_produced_product_by_cap, "potential_produced_product_by_panel" : potential_produced_product_by_panel}
+        potential_produced_product_raw_materials = {f"potential_produced_{self.product_name}_by_uncut_sheet" : potential_produced_product_by_uncut_sheet, f"potential_produced_{self.product_name}_by_cap": potential_produced_product_by_cap, f"potential_produced_{self.product_name}_by_panel" : potential_produced_product_by_panel}
 
         min_boxes_of_product_key = min(potential_produced_product_raw_materials, key = potential_produced_product_raw_materials.get)
 
@@ -54,4 +49,3 @@ class ProDetect:
 
         print(potential_produced_product_raw_materials)
         print(min_boxes_of_product)
-        
