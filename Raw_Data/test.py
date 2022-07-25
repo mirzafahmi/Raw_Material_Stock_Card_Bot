@@ -24,6 +24,34 @@ class ProDetect:
                 #fomula to calculate potential produced goods based on uncutsheet
                 potential_produced_product_by_uncut_sheet = (product_uncut_sheet["Received"].iloc[-1] * product_tests_per_uncut_sheet / product_tests_per_box)
                 potential_produced_product_raw_materials[f"potential_produced_{self.product_name}_by_uncut_sheet"] = potential_produced_product_by_uncut_sheet
+            
+            if (sheet == "Uncut Sheet 1"):
+                product_uncut_sheet_raw_1 = product_data["Uncut Sheet 1"]
+                #trim unnecessary excel cell and assign to columns name
+                product_uncut_sheet_1 = product_uncut_sheet_raw_1.iloc[10:]
+                product_uncut_sheet_1.columns = product_uncut_sheet_raw_1.iloc[8]
+                #fomula to calculate potential produced goods based on uncutsheet
+                potential_produced_product_by_uncut_sheet_1 = (product_uncut_sheet_1["Received"].iloc[-1] * product_tests_per_uncut_sheet / product_tests_per_box)
+                potential_produced_product_raw_materials[f"potential_produced_{self.product_name}_by_uncut_sheet_1"] = potential_produced_product_by_uncut_sheet_1
+
+            if (sheet == "Uncut Sheet 2"):
+                product_uncut_sheet_raw_2 = product_data["Uncut Sheet 2"]
+                #trim unnecessary excel cell and assign to columns name
+                product_uncut_sheet_2 = product_uncut_sheet_raw_2.iloc[10:]
+                product_uncut_sheet_2.columns = product_uncut_sheet_raw_2.iloc[8]
+                #fomula to calculate potential produced goods based on uncutsheet
+                potential_produced_product_by_uncut_sheet_2 = (product_uncut_sheet_2["Received"].iloc[-1] * product_tests_per_uncut_sheet / product_tests_per_box)
+                potential_produced_product_raw_materials[f"potential_produced_{self.product_name}_by_uncut_sheet_2"] = potential_produced_product_by_uncut_sheet_2
+            
+            if (sheet == "Uncut Sheet 3"):
+                product_uncut_sheet_raw_3 = product_data["Uncut Sheet 3"]
+                #trim unnecessary excel cell and assign to columns name
+                product_uncut_sheet_3 = product_uncut_sheet_raw_3.iloc[10:]
+                product_uncut_sheet_3.columns = product_uncut_sheet_raw_3.iloc[8]
+                #fomula to calculate potential produced goods based on uncutsheet
+                potential_produced_product_by_uncut_sheet_3 = (product_uncut_sheet_3["Received"].iloc[-1] * product_tests_per_uncut_sheet / product_tests_per_box)
+                potential_produced_product_raw_materials[f"potential_produced_{self.product_name}_by_uncut_sheet_3"] = potential_produced_product_by_uncut_sheet_3
+
 
             if (sheet == "Cassette"):
                 product_cassette_raw = product_data["Cassette"]
