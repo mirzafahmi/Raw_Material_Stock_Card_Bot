@@ -1,18 +1,5 @@
 import pandas as pd
 
-"""product_data = pd.read_excel(f'Raw_Data/F037_For_PR_FLU.xlsx', sheet_name = None)
-
-if ("Cassette3" in product_data.keys()):
-    product_cassette_raw = product_data["Cassette"]
-else:
-    product_cassette_raw = None
-#print(list(product_data.keys())[1:])
-#print(product_cassette_raw)
-
-sheet_name = list(product_data.keys())[1:]
-
-print(sheet_name)"""
-
 class ProDetect:
     def __init__(self, product_name, tests_per_box):
         self.product_name = product_name
@@ -22,16 +9,22 @@ class ProDetect:
         product_data = pd.read_excel(f'Raw_Data/F037_For_{self.product_name}.xlsx', sheet_name = None)
         sheet_name = list(product_data.keys())[1:]
 
+        #create variable
+        product_tests_per_box = self.tests_per_box
+        product_tests_per_uncut_sheet = 70
+        potential_produced_product_raw_materials = {}
+
         for sheet in sheet_name:
+            
             if (sheet == "Uncut Sheet"):
                 product_uncut_sheet_raw = product_data["Uncut Sheet"]
-
                 #trim unnecessary excel cell and assign to columns name
                 product_uncut_sheet = product_uncut_sheet_raw.iloc[10:]
                 product_uncut_sheet.columns = product_uncut_sheet_raw.iloc[8]
-            print(product_uncut_sheet)
+                #fomula to calculate potential produced goods based on uncutsheet
+                potential_produced_product_by_uncut_sheet = (product_uncut_sheet["Received"].iloc[-1] * product_tests_per_uncut_sheet / product_tests_per_box)
+                potential_produced_product_raw_materials[f"potential_produced_{self.product_name}_by_uncut_sheet"] = potential_produced_product_by_uncut_sheet
 
-            global product_cassette
             if (sheet == "Cassette"):
                 product_cassette_raw = product_data["Cassette"]
 
@@ -45,30 +38,44 @@ class ProDetect:
                 adjusted_columns_name[4] = "Panels Received"
                 adjusted_columns_name[5] = "Panels Issue"
                 product_cassette.columns = adjusted_columns_name
-            print(product_cassette)
+
+                #formula to calculate potential produced goods based on cap and panel
+                potential_produced_product_by_cap = product_cassette["Caps Received"].iloc[-1] / product_tests_per_box
+                potential_produced_product_raw_materials[f"potential_produced_{self.product_name}_by_cap"] = potential_produced_product_by_cap
+                potential_produced_product_by_panel = product_cassette["Panels Received"].iloc[-1] / product_tests_per_box
+                potential_produced_product_raw_materials[f"potential_produced_{self.product_name}_by_panel"] = potential_produced_product_by_panel
             
-            """#create variable
-            product_tests_per_box = self.tests_per_box
-            product_tests_per_uncut_sheet = 70
+            if (sheet == "Pipette"):
+                product_pipette_raw = product_data["Pipette"]
 
-            #fomula to calculate potential produced goods based on uncutsheet
-            potential_produced_product_by_uncut_sheet = (product_uncut_sheet["Received"].iloc[-1] * product_tests_per_uncut_sheet / product_tests_per_box)
+                #trim unnecessary excel cell and assign to columns name
+                product_pipette = product_pipette_raw.iloc[10:]
+                product_pipette.columns = product_pipette_raw.iloc[8]
 
-            #formula to calculate potential produced goods based on cap and panel
-            potential_produced_product_by_cap = product_cassette["Caps Received"].iloc[-1] / product_tests_per_box
-            potential_produced_product_by_panel = product_cassette["Panels Received"].iloc[-1] / product_tests_per_box
+                potential_produced_product_by_pipette = (product_pipette["Received"].iloc[-1] / product_tests_per_box)
+                potential_produced_product_raw_materials[f"potential_produced_{self.product_name}_by_pipette"] = potential_produced_product_by_pipette
 
-            potential_produced_product_raw_materials = {f"potential_produced_{self.product_name}_by_uncut_sheet" : potential_produced_product_by_uncut_sheet, f"potential_produced_{self.product_name}_by_cap": potential_produced_product_by_cap, f"potential_produced_{self.product_name}_by_panel" : potential_produced_product_by_panel}
+            if (sheet == "Buffer"):
+                product_buffer_raw = product_data["Buffer"]
 
-            min_boxes_of_product_key = min(potential_produced_product_raw_materials, key = potential_produced_product_raw_materials.get)
+                #trim unnecessary excel cell and assign to columns name
+                product_buffer = product_buffer_raw.iloc[10:]
+                product_buffer.columns = product_buffer_raw.iloc[8]
 
-            min_boxes_of_product = f'{min_boxes_of_product_key} : {potential_produced_product_raw_materials[min_boxes_of_product_key]}'
+                potential_produced_product_by_buffer = (product_buffer["Received"].iloc[-1] / product_tests_per_box)
+                potential_produced_product_raw_materials[f"potential_produced_{self.product_name}_by_buffer"] = potential_produced_product_by_buffer
+        
 
-            print(potential_produced_product_raw_materials)
-            print(min_boxes_of_product)"""
-        print(product_uncut_sheet)
+        min_boxes_of_product_key = min(potential_produced_product_raw_materials, key = potential_produced_product_raw_materials.get)
 
+        min_boxes_of_product = f'{min_boxes_of_product_key} : {potential_produced_product_raw_materials[min_boxes_of_product_key]}'
+
+        print(potential_produced_product_raw_materials)
+        print(min_boxes_of_product)
 
 PHA5021C = ProDetect("PHA5021C", 40)
 
+PR_FLU = ProDetect("PR_FLU", 25)
+
 print(PHA5021C.min_potential_produced())
+print(PR_FLU.min_potential_produced())
