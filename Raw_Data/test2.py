@@ -18,13 +18,13 @@ class ProDetect:
             potential_produced_product_raw_materials = {}
 
             for sheet in all_uncut_sheets:
-                    product_{sheet}_uncut_sheet_raw = product_data[f"{sheet}"]
+                    globals()[f"product_{sheet}_uncut_sheet_raw "] = product_data[f"{sheet}"]
                     #trim unnecessary excel cell and assign to columns name
-                    [f"product_{sheet}_uncut_sheet"] = f"product_{sheet}_uncut_sheet_raw.iloc[10:]"
-                    product_{sheet}_uncut_sheet.columns = product_{sheet}_uncut_sheet_raw.iloc[8]
+                    globals()[f"product_{sheet}_uncut_sheet"] = f"product_{sheet}_uncut_sheet_raw.iloc[10:]"
+                    globals()[f"product_{sheet}_uncut_sheet.columns"] = f"product_{sheet}_uncut_sheet_raw.iloc[8]"
                     #fomula to calculate potential produced goods based on uncutsheet
-                    potential_produced_product_by_{sheet}_uncut_sheet = (product_{sheet}_uncut_sheet["Received"].iloc[-1] * product_tests_per_uncut_sheet / product_tests_per_box)
-                    potential_produced_product_raw_materials[f"potential_produced_{self.product_name}_by_{sheet}_uncut_sheet"] = potential_produced_product_by_{sheet}_uncut_sheet
+                    f"potential_produced_product_by_{sheet}_uncut_sheet" = (globals()[f"product_{sheet}_uncut_sheet["Received"].iloc[-1]"] * product_tests_per_uncut_sheet / product_tests_per_box)
+                    potential_produced_product_raw_materials[f"potential_produced_{self.product_name}_by_{sheet}_uncut_sheet"] = f"potential_produced_product_by_{sheet}_uncut_sheet"
 
 
 
