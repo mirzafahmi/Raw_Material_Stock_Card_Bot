@@ -7,7 +7,7 @@ class ProDetect:
 
     def min_potential_produced(self):
         product_data = pd.read_excel(f'Raw_Data/F037_For_{self.product_name}.xlsx', sheet_name = None)
-        sheet_name = list(product_data.keys())[1:]
+        sheet_name = list(product_data.keys())
 
         #create variable
         product_tests_per_box = self.tests_per_box
