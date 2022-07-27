@@ -26,15 +26,15 @@ class ProDetect:
 
             #globals() made the dynamic variable name possible
 
-            globals()[f"product_{sheet}_uncut_sheet_raw"] = product_data[f"{sheet}"]
+            globals()[f"product_{sheet}_raw"] = product_data[f"{sheet}"]
             
             #trim unnecessary excel cell and assign to columns name
-            globals()[f"product_{sheet}_uncut_sheet"] = globals()[f"product_{sheet}_uncut_sheet_raw"].iloc[10:]
-            globals()[f"product_{sheet}_uncut_sheet"].columns = globals()[f"product_{sheet}_uncut_sheet_raw"].iloc[8]
+            globals()[f"product_{sheet}"] = globals()[f"product_{sheet}_raw"].iloc[10:]
+            globals()[f"product_{sheet}"].columns = globals()[f"product_{sheet}_raw"].iloc[8]
             
             #fomula to calculate potential produced goods based on "uncut sheet", it will read the last value in "Received" column
-            globals()[f"potential_produced_product_by_{sheet}_uncut_sheet"] = globals()[f"product_{sheet}_uncut_sheet"]["Received"].iloc[-1] * product_tests_per_uncut_sheet / product_tests_per_box
-            potential_produced_product_raw_materials[f"potential_produced_{self.product_name}_by_{sheet}_uncut_sheet"] = globals()[f"potential_produced_product_by_{sheet}_uncut_sheet"]
+            globals()[f"potential_produced_product_by_{sheet}"] = globals()[f"product_{sheet}"]["Received"].iloc[-1] * product_tests_per_uncut_sheet / product_tests_per_box
+            potential_produced_product_raw_materials[f"potential_produced_{self.product_name}_by_{sheet}"] = globals()[f"potential_produced_product_by_{sheet}"]
 
         #for loop for all other components
 
@@ -86,12 +86,19 @@ class ProDetect:
         min_boxes_of_product_key = min(potential_produced_product_raw_materials, key = potential_produced_product_raw_materials.get)
         
         #
-        min_boxes_of_product = f'{min_boxes_of_product_key} : {potential_produced_product_raw_materials[min_boxes_of_product_key]}'
+        #min_boxes_of_product = f'{min_boxes_of_product_key} -> {potential_produced_product_raw_materials[min_boxes_of_product_key]}'
+        min_boxes_of_product = {min_boxes_of_product_key:potential_produced_product_raw_materials[min_boxes_of_product_key]}
+        
+        print(f'{self.product_name}' + '\n')
 
-        print([f'{key} -> {value}' for key,value in potential_produced_product_raw_materials.items()])
+        for key,value in potential_produced_product_raw_materials.items():
+            x = f'{key} -> {value}' + '\n'
+            print(x)
+        #print([f'{key} -> {value}' for key,value in potential_produced_product_raw_materials.items()])
         print(min_boxes_of_product)
+        #print(potential_produced_product_by_pipette)
         
 
-pr = ProDetect("PR_DOA_5", 25)
+PR_CHK = ProDetect("PR_CHK", 25)
 
-print(pr.min_potential_produced())
+print(PR_CHK.min_potential_produced())
