@@ -1,10 +1,6 @@
 import sys
 import os
-script_dir = os.path.dirname( __file__ )
-#access Class file
-ProDetect_class_script_dir = os.path.join( script_dir, "Raw_Data" )
-sys.path.append(ProDetect_class_script_dir)
-from ProDetect_class import ProDetect
+from test_class import ProDetect
 
 products_list = ["PR_DEN", "PHA5021C", "PR_FLU", "PR_GAST_3", "PR_SYP", "PR_HBSAG", "PR_DOA_5", "PR_DAM", "PR_DBZ", "PR_DKE", "PR_DMD", "PR_DMDA", "PR_DMO", "PR_DOP", "PR_DTH", "PR_MYP", "PR_CHK"]
 
