@@ -8,7 +8,6 @@ class ProDetect:
         self.number_of_buffer_per_box = number_of_buffer_per_box
 
     def min_potential_produced(self):
-        print()
         #dynamically read the excel file from the name of the product
         product_data = pd.read_excel(f'Raw_Data/F037_For_{self.product_name}.xlsx', sheet_name = None)
 
@@ -39,8 +38,6 @@ class ProDetect:
             #fomula to calculate potential produced goods based on "uncut sheet", it will read the last value in "Received" column
             globals()[f"potential_produced_product_by_{sheet}"] = globals()[f"product_{sheet}"]["Received"].iloc[-1] * product_tests_per_uncut_sheet / product_tests_per_box
             potential_produced_product_raw_materials[f"potential_produced_{self.product_name}_by_{sheet}"] = globals()[f"potential_produced_product_by_{sheet}"]
-
-        #for loop for all other components
 
         for sheet in all_cassettes:
             #globals() made the dynamic variable name possible

@@ -52,7 +52,7 @@ def apps():
 
     if (item_code_input in products_list):
         raw_materials_by_input(eval(item_code_input)) #use eval to strip the string and convert into expression
-    if(item_code_input == "ALL"):
+    elif(item_code_input == "ALL"):
         raw_materials_by_all_products()
     else:
         print("Please enter correct product code in as this format: 'PR-XXXX'")
