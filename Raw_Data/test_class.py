@@ -104,8 +104,8 @@ class ProDetect:
             x = f'{key} -> {value}'
             print(x)
         print('\n' f'Bottlenecked Raw Material for {self.product_name} (in boxes): ' '\n' f'{min_boxes_of_product}')"""
-
-        print(potential_produced_product_raw_materials)
+        for x, y in potential_produced_product_raw_materials.items():
+            print(potential_produced_product_raw_materials[y])
 
 PR_CHK = ProDetect("PR_CHK", 25, 1)
 
