@@ -104,9 +104,23 @@ class ProDetect:
             x = f'{key} -> {value}'
             print(x)
         print('\n' f'Bottlenecked Raw Material for {self.product_name} (in boxes): ' '\n' f'{min_boxes_of_product}')"""
-        for x, y in potential_produced_product_raw_materials.items():
-            print(potential_produced_product_raw_materials[y])
+        """for components in potential_produced_product_raw_materials:
+            print(f'{components} -> {potential_produced_product_raw_materials[components]["Qty"]}')
+            #print(f'{components} -> {potential_produced_product_raw_materials[components]["Exp"]}')"""
+        
+        DOA_combo_options = ["AMP", "MET", "MOP", "BZO", "THC"] #310.8, 260.4, 316.4, 350.0, 224.0
+        #a = [i for i in potential_produced_product_raw_materials.keys() if DOA_combo_options[1] in i]
+        #print(a)
+        
+        for options in DOA_combo_options:
+            x = 0
+            for i in potential_produced_product_raw_materials.keys():
+                if options in i:
+                    x+=(potential_produced_product_raw_materials[i]["Qty"])
+                potential_produced_product_raw_materials[f'potential_produced_{self.product_name}_by_{options}_Uncut_Sheet']["Qty"] = x
+            del potential_produced_product_raw_materials[f'potential_produced_{self.product_name}_by_{options}_2_Uncut_Sheet']
+        print(potential_produced_product_raw_materials)
 
-PR_CHK = ProDetect("PR_CHK", 25, 1)
+PR_CHK = ProDetect("PR_DOA_5", 25, 0)
 
 print(PR_CHK.min_potential_produced())
