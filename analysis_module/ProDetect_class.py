@@ -14,7 +14,12 @@ class ProDetect:
 
     def min_potential_produced(self):
         # Dynamically read the excel file from the name of the product
-        product_data = pd.read_excel(f'Raw_Data/F037_For_{self.product_name}.xlsx', sheet_name = None)
+        if (self.product_name == 'PR_DOA_4'):
+            product_data = pd.read_excel(f'Raw_Data/F037_For_PR_DOA_5.xlsx', sheet_name = None)
+        elif (self.product_name == 'PR_DOA_3'):
+            product_data = pd.read_excel(f'Raw_Data/F037_For_PR_DOA_5.xlsx', sheet_name = None)
+        else:
+            product_data = pd.read_excel(f'Raw_Data/F037_For_{self.product_name}.xlsx', sheet_name = None)
 
         # Get the name of the sheet to differentiate between uncut_sheet components and others as some products has combinations thus need different function for the uncut_sheet sheet
         sheet_name = list(product_data.keys())
@@ -23,60 +28,61 @@ class ProDetect:
         all_buffers = [i for i in sheet_name if 'Buffer' in i]
         other_components = [i for i in sheet_name if i not in np.concatenate((all_uncut_sheets, all_cassettes, all_buffers))]
 
-        # create variable
+        # Create variable
         product_tests_per_box = self.tests_per_box
         number_of_buffer_per_box = self.number_of_buffer_per_box
         product_tests_per_uncut_sheet = 70
         potential_produced_product_raw_materials = {}
 
-        # create for loop to dynamically go through all the uncut_sheet sheet
+        # Create for loop to dynamically go through all the uncut_sheet sheet
 
         for sheet in all_uncut_sheets:
             trim_sheet = sheet.strip('_1_2')
 
             sheet_number = ' '.join(map(str, re.findall(r'\d+', sheet)))
-            # globals() made the dynamic variable name possible
+            # Globals() made the dynamic variable name possible
             globals()[f'product_{trim_sheet}_raw'] = product_data[f'{sheet}']
             
-            # trim unnecessary excel cell and assign to columns name
+            # Trim unnecessary excel cell and assign to columns name
             globals()[f'product_{trim_sheet}'] = globals()[f'product_{trim_sheet}_raw'].iloc[10:]
             globals()[f'product_{trim_sheet}'].columns = globals()[f'product_{trim_sheet}_raw'].iloc[8]
             
-            # fomula to calculate potential produced goods based on 'uncut sheet', it will read the last value in 'Received' column
+            # Fomula to calculate potential produced goods based on 'uncut sheet', it will read the last value in 'Received' column
             globals()[f'potential_produced_product_by_{trim_sheet}'] = globals()[f'product_{trim_sheet}']['Received'].iloc[-1] * product_tests_per_uncut_sheet / product_tests_per_box
             globals()[f'potential_produced_product_by_{trim_sheet}_exp_date'] = globals()[f'product_{trim_sheet}']['Remarks'].iloc[-2]
-            # potential_produced_product_raw_materials[f'potential_produced_{self.product_name}_by_{trim_sheet}'] = {f'{sheet_number}': {'Qty': globals()[f'potential_produced_product_by_{trim_sheet}'], 'Exp': globals()[f'potential_produced_product_by_{trim_sheet}_exp_date']}}
+            
+            # Update the dict of corresponding component with another same component that has different lot number
             if (f'potential_produced_{self.product_name}_by_{trim_sheet}') in potential_produced_product_raw_materials:
                 potential_produced_product_raw_materials[f'potential_produced_{self.product_name}_by_{trim_sheet}'].update({f'{sheet_number}': {'Qty': globals()[f'potential_produced_product_by_{trim_sheet}'], 'Exp': globals()[f'potential_produced_product_by_{trim_sheet}_exp_date']}})
             else:
                 potential_produced_product_raw_materials[f'potential_produced_{self.product_name}_by_{trim_sheet}'] = {f'{sheet_number}': {'Qty': globals()[f'potential_produced_product_by_{trim_sheet}'], 'Exp': globals()[f'potential_produced_product_by_{trim_sheet}_exp_date']}}
         
         for sheet in all_cassettes:
-            # globals() made the dynamic variable name possible
+            # Globals() made the dynamic variable name possible
             globals()[f'product_{sheet}_raw'] = product_data[f'{sheet}']
 
-            # trim unnecessary excel cell and assign to columns name
+            # Trim unnecessary excel cell and assign to columns name
             globals()[f'product_{sheet}'] = globals()[f'product_{sheet}_raw'].iloc[10:]
             adjusted_columns_name = globals()[f'product_{sheet}_raw'].iloc[8]
 
-            # renaming the blank columns due to multi-index column
+            # Renaming the blank columns due to multi-index column
             adjusted_columns_name[1] = 'Caps Received'
             adjusted_columns_name[2] = 'Caps Issue'
             adjusted_columns_name[4] = 'Panels Received'
             adjusted_columns_name[5] = 'Panels Issue'
             globals()[f'product_{sheet}'].columns = adjusted_columns_name
 
-            # formula to calculate potential produced goods based on 'cap' and 'panel', it will read the last value in 'Received' column
+            # Formula to calculate potential produced goods based on 'cap' and 'panel', it will read the last value in 'Received' column
             globals()[f'potential_produced_product_by_{sheet}_caps'] = globals()[f'product_{sheet}']['Caps Received'].iloc[-1] / product_tests_per_box
             potential_produced_product_raw_materials[f'potential_produced_{self.product_name}_by_{sheet}_caps'] = {'Qty': globals()[f'potential_produced_product_by_{sheet}_caps']}
             globals()[f'potential_produced_product_by_{sheet}_panels'] = globals()[f'product_{sheet}']['Panels Received'].iloc[-1] / product_tests_per_box
             potential_produced_product_raw_materials[f'potential_produced_{self.product_name}_by_{sheet}_panels'] = {'Qty': globals()[f'potential_produced_product_by_{sheet}_panels']}
 
         for sheet in all_buffers:
-            # globals() made the dynamic variable name possible
+            # Globals() made the dynamic variable name possible
             globals()[f'product_{sheet}_raw'] = product_data[f'{sheet}']
             
-            # trim unnecessary excel cell and assign to columns name
+            # Trim unnecessary excel cell and assign to columns name
             globals()[f'product_{sheet}'] = globals()[f'product_{sheet}_raw'].iloc[10:]
             globals()[f'product_{sheet}'].columns = globals()[f'product_{sheet}_raw'].iloc[8]
 
@@ -85,18 +91,19 @@ class ProDetect:
             potential_produced_product_raw_materials[f'potential_produced_{self.product_name}_by_{sheet}'] = {'Qty': globals()[f'potential_produced_product_by_{sheet}']}
         
         for sheet in other_components:
-            # globals() made the dynamic variable name possible
+            # Globals() made the dynamic variable name possible
             globals()[f'product_{sheet}_raw'] = product_data[f'{sheet}']
             
-            # trim unnecessary excel cell and assign to columns name
+            # Trim unnecessary excel cell and assign to columns name
             globals()[f'product_{sheet}'] = globals()[f'product_{sheet}_raw'].iloc[10:]
             globals()[f'product_{sheet}'].columns = globals()[f'product_{sheet}_raw'].iloc[8]
 
             globals()[f'potential_produced_product_by_{sheet}'] = globals()[f'product_{sheet}']['Received'].iloc[-1] / product_tests_per_box
             potential_produced_product_raw_materials[f'potential_produced_{self.product_name}_by_{sheet}'] = {'Qty': globals()[f'potential_produced_product_by_{sheet}']}
 
+        # Looping through to find the min value of "Total Qty" in each key
         for key in potential_produced_product_raw_materials.keys():
-            '''looping through to find the min value of "Total Qty" in each key'''
+            
             total_qty = []
             
             for x in potential_produced_product_raw_materials[key].keys():
@@ -106,9 +113,20 @@ class ProDetect:
                     total_qty.append(potential_produced_product_raw_materials[key][x]['Qty'])
             potential_produced_product_raw_materials[f'{key}'].update({'Total Qty': math.floor(sum(total_qty))})
         
+        print(potential_produced_product_raw_materials)
+
+        PR_DOA_combo = ['PR_DOA_5', 'PR_DOA_4', 'PR_DOA_3']
+        PR_DOA_combo.remove(self.product_name)
+
+        for key in list(potential_produced_product_raw_materials.keys()):
+            for combo in PR_DOA_combo:
+                if combo in key:
+                    potential_produced_product_raw_materials.pop(key)
+
+        
         total_qty_dict = {key: list(val.values())[-1] for key, val in potential_produced_product_raw_materials.items()}
         min_boxes_of_product_key = min(total_qty_dict, key=total_qty_dict.get)
-        min_boxes_of_product = {min_boxes_of_product_key: potential_produced_product_raw_materials[min_boxes_of_product_key]['Total Qty']}
+        min_boxes_of_product = f'{min_boxes_of_product_key} -> Qty: {potential_produced_product_raw_materials[min_boxes_of_product_key]["Total Qty"]}'
         
         opening_text = f'Raw Material Output for {self.product_name} (in boxes)'
 
@@ -116,11 +134,11 @@ class ProDetect:
         for key,value in potential_produced_product_raw_materials.items():
             print(f'{key} -> {value}')
         
-        print('\n' f'Limiting Factor of Raw Material for {self.product_name} (in boxes): ' '\n' f'{min_boxes_of_product.keys} -> {min_boxes_of_product.values}')
+        print('\n' f'Limiting Factor of Raw Material for {self.product_name} (in boxes): ' '\n' f'{min_boxes_of_product}')
 
         closing_text = 'End of Summary'
         print('\n' f'{closing_text:-^{terminal_size}}')
         
 
 if __name__ == '__main__':
-    print(ProDetect('PR_DOA_5', 25, 0).min_potential_produced())
+    print(ProDetect('PR_DOA_5_1', 25, 0).min_potential_produced())

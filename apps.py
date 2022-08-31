@@ -3,19 +3,21 @@ import os
 from analysis_module import ProDetect_class as pc
 
 
-products_list = ["PR_DEN", "PHA5021C", "PR_FLU", "PR_GAST_3", "PR_SYP", "PR_HBSAG", "PR_DOA_5", "PR_DOA_5_1", "PR_DAM", "PR_DBZ", "PR_DKE", "PR_DME", "PR_DMD", "PR_DMDA", "PR_DMO", "PR_DOP", "PR_DTH", "PR_MYP", "PR_CHK"]
+products_list = ["PR_DEN", "PHA5021C", "PR_FLU", "PR_GAST_3", "PR_SYP", "PR_HBSAG", "PR_DOA_5", "PR_DOA_5_1", "PR_DOA_4", "PR_DOA_3", "PR_DAM", "PR_DBZ", "PR_DKE", "PR_DME", "PR_DMD", "PR_DMDA", "PR_DMO", "PR_DOP", "PR_DTH", "PR_MYP", "PR_CHK"]
 
 # Innitiate the class by products
 
 # Product_Code = ProDetect("product_code", tests_per_box, number_of_buffer_per_box)
-PR_DEN = pc.ProDetect("PR_DEN", 25, 1) # For all dengue products as they share materials
+PR_DEN = pc.ProDetect("PR_DEN", 25, 1)          # For all dengue products as they share materials
 PHA5021C = pc.ProDetect("PHA5021C", 40, 0)
-PR_FLU = pc.ProDetect("PR_FLU", 25, 2) # For all PR_FLU, PR_FSV and PR_FSVA products as they share materials
+PR_FLU = pc.ProDetect("PR_FLU", 25, 2)          # For all PR_FLU, PR_FSV and PR_FSVA products as they share materials
 PR_GAST_3 = pc.ProDetect("PR_GAST_3", 25, 1)
 PR_SYP = pc.ProDetect("PR_SYP", 25, 1)
 PR_HBSAG = pc.ProDetect("PR_HBSAG", 25, 1)
-PR_DOA_5 = pc.ProDetect("PR_DOA_5", 25, 0) # For all DOA combo
-PR_DOA_5_1 = pc.ProDetect("PR_DOA_5", 50, 0) # For all DOA combo convert to single strip
+PR_DOA_5 = pc.ProDetect("PR_DOA_5", 25, 0)      # For all DOA combo
+PR_DOA_4 = pc.ProDetect("PR_DOA_4", 25, 0)
+PR_DOA_3 = pc.ProDetect("PR_DOA_3", 25, 0)
+PR_DOA_5_1 = pc.ProDetect("PR_DOA_5", 50, 0)    # For all DOA combo convert to single strip
 
 # For all single strip DOA test
 PR_DAM = pc.ProDetect("PR_DAM", 50, 0)
