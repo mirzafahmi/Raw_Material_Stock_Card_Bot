@@ -1,5 +1,8 @@
 import pandas as pd
 import numpy as np
+import os
+
+terminal_size = os.get_terminal_size().columns #access terminal columns size for print the header
 
 class ProDetect:
     def __init__(self, product_name, tests_per_box, number_of_buffer_per_box):
@@ -97,5 +100,13 @@ class ProDetect:
             print(x)
         #print([f'{key} -> {value}' for key,value in potential_produced_product_raw_materials.items()])
 
-        print('\n' f'Bottlenecked Raw Material for {self.product_name} (in boxes): ' '\n' f'{min_boxes_of_product}')
+        print('\n' f'Limiting Factor of Raw Material for {self.product_name} (in boxes): ' '\n' f'{min_boxes_of_product}')
+
+        closing_text = "End of Summary"
+        print('\n' f'{closing_text:-^{terminal_size}}')
         
+
+if __name__ == ' __main__':
+    
+    print('hi')
+    print(ProDetect('PR_DOA_5', 25, 0).min_potential_produced())

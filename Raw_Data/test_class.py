@@ -121,6 +121,6 @@ class ProDetect:
             del potential_produced_product_raw_materials[f'potential_produced_{self.product_name}_by_{options}_2_Uncut_Sheet']
         print(potential_produced_product_raw_materials)
 
-PR_CHK = ProDetect("PR_DOA_5", 25, 0)
+PR_CHK = ProDetect("PR_DTH", 50, 0)
 
 print(PR_CHK.min_potential_produced())
