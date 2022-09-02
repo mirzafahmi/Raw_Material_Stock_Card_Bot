@@ -7,16 +7,17 @@ import math
 terminal_size = os.get_terminal_size().columns # Access terminal columns size for print the header
 
 class ProDetect:
+    global min_boxes_of_all_product
+    min_boxes_of_all_product = {}
+    
     def __init__(self, product_name, tests_per_box, number_of_buffer_per_box):
         self.product_name = product_name
         self.tests_per_box = tests_per_box
         self.number_of_buffer_per_box = number_of_buffer_per_box
-    global min_boxes_of_all_product
-    min_boxes_of_all_product = {}
 
-    def min_potential_produced(self):
+    def raw_data(self):
         # Dynamically read the excel file from the name of the product
-        if (self.product_name == 'PR_DOA_4' or self.product_name == 'PR_DOA_3'):
+        if (self.product_name == 'PR_DOA_4' or self.product_name == 'PR_DOA_3' or self.product_name == 'PR_DOA_5_1'):
             product_data = pd.read_excel(f'Raw_Data/F037_For_PR_DOA_5.xlsx', sheet_name = None)
         elif (self.product_name == 'PR_FSV' or self.product_name == 'PR_FSVA'):
             product_data = pd.read_excel(f'Raw_Data/F037_For_PR_FLU.xlsx', sheet_name = None)
@@ -36,6 +37,7 @@ class ProDetect:
         product_tests_per_box = self.tests_per_box
         number_of_buffer_per_box = self.number_of_buffer_per_box
         product_tests_per_uncut_sheet = 70
+        global potential_produced_product_raw_materials
         potential_produced_product_raw_materials = {}
         # Create for loop to dynamically go through all the uncut_sheet sheet
 
@@ -52,7 +54,7 @@ class ProDetect:
             
             # Fomula to calculate potential produced goods based on 'uncut sheet', it will read the last value in 'Received' column
             globals()[f'potential_produced_product_by_{trim_sheet}'] = globals()[f'product_{trim_sheet}']['Received'].iloc[-1] * product_tests_per_uncut_sheet / product_tests_per_box
-            globals()[f'potential_produced_product_by_{trim_sheet}_exp_date'] = globals()[f'product_{trim_sheet}']['Remarks'].iloc[-2]
+            globals()[f'potential_produced_product_by_{trim_sheet}_exp_date'] = globals()[f'product_{trim_sheet}']['Remarks'].iloc[0]
             
             # Update the dict of corresponding component with another same component that has different lot number
             if (f'potential_produced_{self.product_name}_by_{trim_sheet}') in potential_produced_product_raw_materials:
@@ -177,9 +179,15 @@ class ProDetect:
         total_qty_dict = {key: list(val.values())[-1] for key, val in potential_produced_product_raw_materials.items()}
         
         # Find the minimum ammount of product can be produced based on 'Total Qty'
+        global min_boxes_of_product_key
+        global min_boxes_of_product
         min_boxes_of_product_key = min(total_qty_dict, key=total_qty_dict.get)
         min_boxes_of_product = f'{min_boxes_of_product_key} -> Qty: {potential_produced_product_raw_materials[min_boxes_of_product_key]["Total Qty"]}'
+        min_boxes_of_all_product.update({self.product_name: potential_produced_product_raw_materials[min_boxes_of_product_key]["Total Qty"]})
+
         
+    def min_potential_produced(self):
+        self.raw_data()
         # Printing section of summary
         opening_text = f'Raw Material Output for {self.product_name} (in boxes)'
 
@@ -191,12 +199,11 @@ class ProDetect:
 
         closing_text = 'End of Summary'
         print('\n' f'{closing_text:-^{terminal_size}}')
-        min_boxes_of_all_product.update({self.product_name: potential_produced_product_raw_materials[min_boxes_of_product_key]["Total Qty"]})
-    
+        
     def min_potential_produced_all(self):
-        self.min_potential_produced()
+        self.raw_data()
         return min_boxes_of_all_product
 
 
 if __name__ == '__main__':
-    print(ProDetect('PR_FLU', 25, 2).min_potential_produced())
+    print(ProDetect('PR_FLU', 25, 2).min_potential_produced_all())

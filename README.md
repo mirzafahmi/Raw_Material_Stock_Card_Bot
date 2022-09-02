@@ -40,7 +40,7 @@ This project depend on:
 
 * Modify the output of ```Limiting Factor Component``` to be tailored to the type of Item Code (For examples: PR-DOA-5 components are shared with PR-DOA-4 and PR-DOA-3, thus unrelated to the ```Item Code``` input will be not showed in the output).
 
-    <label for="file">Progress:</label> <progress id="file" max="100" value="70"></progress>
+    <label for="file">Progress:</label> <progress id="file" max="100" value="90"></progress>
 
 * Integrated the output of ```ALL``` input into Finished Goods Stock Card in Google sheet.
 
