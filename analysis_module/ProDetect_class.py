@@ -39,6 +39,7 @@ class ProDetect:
         product_tests_per_uncut_sheet = 70
         global potential_produced_product_raw_materials
         potential_produced_product_raw_materials = {}
+        uncutsheet_expiry_date = []
         # Create for loop to dynamically go through all the uncut_sheet sheet
 
         for sheet in all_uncut_sheets:
@@ -55,12 +56,18 @@ class ProDetect:
             globals()[f'potential_produced_product_by_{trim_sheet}'] = globals()[f'product_{trim_sheet}']['Received'].iloc[-1] * product_tests_per_uncut_sheet / product_tests_per_box
             globals()[f'potential_produced_product_by_{trim_sheet}_exp_date'] = globals()[f'product_{trim_sheet}']['Remarks'].iloc[-2]
             
+            sheet_exp = pd.to_datetime(globals()[f'product_{trim_sheet}']['Remarks'].iloc[-2]).date()
+            uncutsheet_expiry_date.append(sheet_exp)
+    
+
             # Update the dict of corresponding component with another same component that has different lot number
             if (f'potential_produced_{self.product_name}_by_{trim_sheet}') in potential_produced_product_raw_materials:
                 potential_produced_product_raw_materials[f'potential_produced_{self.product_name}_by_{trim_sheet}'].update({f'{sheet_number}': {'Qty': globals()[f'potential_produced_product_by_{trim_sheet}'], 'Exp': globals()[f'potential_produced_product_by_{trim_sheet}_exp_date']}})
             else:
                 potential_produced_product_raw_materials[f'potential_produced_{self.product_name}_by_{trim_sheet}'] = {f'{sheet_number}': {'Qty': globals()[f'potential_produced_product_by_{trim_sheet}'], 'Exp': globals()[f'potential_produced_product_by_{trim_sheet}_exp_date']}}
         
+
+
         for sheet in all_cassettes:
             trim_sheet = sheet.strip('_1_2')
             sheet_number = ' '.join(map(str, re.findall(r'\d$', sheet)))
@@ -99,7 +106,6 @@ class ProDetect:
             else:
                 potential_produced_product_raw_materials[f'potential_produced_{self.product_name}_by_{trim_sheet}_panels'] = {f'{sheet_number}': {'Qty': globals()[f'potential_produced_product_by_{trim_sheet}_panels'], 'Exp': globals()[f'potential_produced_product_by_{trim_sheet}_panels_exp_date']}}
             
-            #potential_produced_product_raw_materials[f'potential_produced_{self.product_name}_by_{trim_sheet}_panels'] = {'Qty': globals()[f'potential_produced_product_by_{trim_sheet}_panels']}
 
         for sheet in all_buffers:
             trim_sheet = sheet.strip('_1_2')
@@ -210,7 +216,7 @@ class ProDetect:
         global min_boxes_of_product
         min_boxes_of_product_key = min(total_qty_dict, key=total_qty_dict.get)
         min_boxes_of_product = f'{min_boxes_of_product_key} -> Qty: {potential_produced_product_raw_materials[min_boxes_of_product_key]["Total Qty"]}'
-        min_boxes_of_all_product.update({self.product_name: {'Total Qty': potential_produced_product_raw_materials[min_boxes_of_product_key]["Total Qty"]}})
+        min_boxes_of_all_product.update({self.product_name: {'Total Qty': potential_produced_product_raw_materials[min_boxes_of_product_key]["Total Qty"], 'Exp': min(uncutsheet_expiry_date).strftime('%Y-%m')}})
         
         
     def min_potential_produced(self):
