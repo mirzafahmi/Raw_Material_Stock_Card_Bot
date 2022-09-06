@@ -3,7 +3,7 @@ import os
 from analysis_module import ProDetect_class as pc
 
 
-products_list = ['PR_DEN_1', 'PR_DEN_2', 'PR_DEN_3_1', 'PR_DEN_3_2', 'PHA5021C', 'PR_FLU', 'PR_FSV', 'PR_FSVA', 'PR_GAST_3', 'PR_SYP', 'PR_HBSAG', 'PR_DOA_5', 'PR_DOA_4', 'PR_DOA_3', 'PR_DAM', 'PR_DBZ', 'PR_DKE', 'PR_DME', 'PR_DMD', 'PR_DMDA', 'PR_DMO', 'PR_DOP', 'PR_DTH', 'PR_MYP', 'PR_CHK']
+products_list = ['PR_DEN_1', 'PR_DEN_2', 'PR_DEN_3_1', 'PR_DEN_3_2', 'PHA5021C', 'PR_FLU', 'PR_FSV', 'PR_FSVA', 'PR_GAST_3', 'PR_SYP', 'PR_HBSAG', 'PR_DOA_5_1', 'PR_DOA_5_2', 'PR_DOA_4', 'PR_DOA_3', 'PR_DAM', 'PR_DBZ', 'PR_DKE', 'PR_DME', 'PR_DMD', 'PR_DMDA', 'PR_DMO', 'PR_DOP', 'PR_DTH', 'PR_MYP', 'PR_CHK']
 
 # Innitiate the class by products
 
@@ -19,7 +19,8 @@ PR_FSVA = pc.ProDetect('PR_FSVA', 25, 2)
 PR_GAST_3 = pc.ProDetect('PR_GAST_3', 25, 1)
 PR_SYP = pc.ProDetect('PR_SYP', 25, 1)
 PR_HBSAG = pc.ProDetect('PR_HBSAG', 25, 1)
-PR_DOA_5 = pc.ProDetect('PR_DOA_5', 25, 0)      # For all DOA combo
+PR_DOA_5_1 = pc.ProDetect('PR_DOA_5', 25, 0)
+PR_DOA_5_2= pc.ProDetect('PR_DOA_5', 25, 0)      # For all DOA combo
 PR_DOA_4 = pc.ProDetect('PR_DOA_4', 25, 0)
 PR_DOA_3 = pc.ProDetect('PR_DOA_3', 25, 0)
 #PR_DOA_5_1 = pc.ProDetect('PR_DOA_5', 50, 0)    # For all DOA combo convert to single strip

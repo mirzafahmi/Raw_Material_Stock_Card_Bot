@@ -17,7 +17,7 @@ class ProDetect:
 
     def raw_data(self):
         # Dynamically read the excel file from the name of the product
-        if (self.product_name == 'PR_DOA_4' or self.product_name == 'PR_DOA_3' or self.product_name == 'PR_DOA_5_1'):
+        if (self.product_name == 'PR_DOA_4' or self.product_name == 'PR_DOA_3' or self.product_name == 'PR_DOA_5_1' or self.product_name == 'PR_DOA_5_2'):
             product_data = pd.read_excel(f'Raw_Data/F037_For_PR_DOA_5.xlsx', sheet_name = None)
         elif (self.product_name == 'PR_FSV' or self.product_name == 'PR_FSVA'):
             product_data = pd.read_excel(f'Raw_Data/F037_For_PR_FLU.xlsx', sheet_name = None)
@@ -43,7 +43,7 @@ class ProDetect:
 
         for sheet in all_uncut_sheets:
             trim_sheet = sheet.strip('_1_2')
-            sheet_number = ' '.join(map(str, re.findall(r'\d+', sheet)))
+            sheet_number = ' '.join(map(str, re.findall(r'\d$', sheet)))
             # Globals() made the dynamic variable name possible
             globals()[f'product_{trim_sheet}_raw'] = product_data[f'{sheet}']
             
@@ -63,7 +63,7 @@ class ProDetect:
         
         for sheet in all_cassettes:
             trim_sheet = sheet.strip('_1_2')
-            sheet_number = ' '.join(map(str, re.findall(r'\d+', sheet)))
+            sheet_number = ' '.join(map(str, re.findall(r'\d$', sheet)))
             
             # Globals() made the dynamic variable name possible
             globals()[f'product_{trim_sheet}_raw'] = product_data[f'{sheet}']
@@ -103,7 +103,7 @@ class ProDetect:
 
         for sheet in all_buffers:
             trim_sheet = sheet.strip('_1_2')
-            sheet_number = ' '.join(map(str, re.findall(r'\d+', sheet)))
+            sheet_number = ' '.join(map(str, re.findall(r'\d$', sheet)))
 
             # Globals() made the dynamic variable name possible
             globals()[f'product_{trim_sheet}_raw'] = product_data[f'{sheet}']
@@ -123,7 +123,7 @@ class ProDetect:
 
         for sheet in other_components:
             trim_sheet = sheet.strip('_1_2')
-            sheet_number = ' '.join(map(str, re.findall(r'\d+', sheet)))
+            sheet_number = ' '.join(map(str, re.findall(r'\d$', sheet)))
 
             # Globals() made the dynamic variable name possible
             globals()[f'product_{trim_sheet}_raw'] = product_data[f'{sheet}']
@@ -233,6 +233,6 @@ class ProDetect:
 
 
 if __name__ == '__main__':
-    x = ProDetect('PHA5021C', 40, 0).raw_data()
+    x = ProDetect('PR_DOA_5', 25, 0).raw_data()
     print(potential_produced_product_raw_materials)
     
