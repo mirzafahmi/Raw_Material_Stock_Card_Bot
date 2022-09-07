@@ -216,7 +216,7 @@ class ProDetect:
         global min_boxes_of_product
         min_boxes_of_product_key = min(total_qty_dict, key=total_qty_dict.get)
         min_boxes_of_product = f'{min_boxes_of_product_key} -> Qty: {potential_produced_product_raw_materials[min_boxes_of_product_key]["Total Qty"]}'
-        min_boxes_of_all_product.update({self.product_name: {'Total Qty': potential_produced_product_raw_materials[min_boxes_of_product_key]["Total Qty"], 'Exp': min(uncutsheet_expiry_date).strftime('%Y-%m')}})
+        min_boxes_of_all_product.update({(self.product_name).replace('_', '-'): {'Total Qty': potential_produced_product_raw_materials[min_boxes_of_product_key]["Total Qty"], 'Exp': min(uncutsheet_expiry_date).strftime('%Y-%m')}})
         
         
     def min_potential_produced(self):
