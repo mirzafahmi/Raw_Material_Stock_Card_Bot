@@ -25,9 +25,6 @@ def potential_finished_goods_based_on_raw_materials():
     print(f'Obtaining and summarize data from excel sheet at {timestamp()}')
     potential_produced_by_raw_material = raw_materials_by_all_products_dict()
 
-    update_times = datetime.now()
-    dt_string = update_times.strftime('%d/%m/%Y %H:%M:%S')
-
     print(f'Update process is inniating at {timestamp()}')
 
     for item in work_sheet.col_values(2):
@@ -39,11 +36,8 @@ def potential_finished_goods_based_on_raw_materials():
                 
                 print(f'Update complete for {item}')
 
-    update_times = datetime.now()
-    dt_string = update_times.strftime('%d/%m/%Y %H:%M:%S')
-
     work_sheet.update('H4:I4', f'Updated by RAW_MATERIAL_BOT at {timestamp()}')
-    work_sheet.format('H4:I4', {'horizontalAlignment': 'CENTER' , 'textFormat': {'fontSize': 9, 'bold': True}})
+    work_sheet.format('H4:I4', {'horizontalAlignment': 'CENTER' , 'textFormat': {'fontSize': 7, 'bold': True}})
     
     print(f'All up to date on {dt_string}. Cheers. Disclaimer: This update still on the beta test stage, any bugs or problem, you may contact me.')
 
