@@ -3,7 +3,7 @@ import os
 from analysis_module import ProDetect_class as pc
 
 
-products_list = ['PR_DEN_1', 'PR_DEN_2', 'PR_DEN_3_1', 'PR_DEN_3_2', 'PHA5021C', 'PR_FLU', 'PR_FSV', 'PR_FSVA', 'PR_GAST_3', 'PR_SYP', 'PR_HBSAG', 'PR_DOA_5_1', 'PR_DOA_5_2', 'PR_DOA_4', 'PR_DOA_3', 'PR_DAM', 'PR_DBZ', 'PR_DCO', 'PR_DKE', 'PR_DME', 'PR_DMD', 'PR_DMDA', 'PR_DMO', 'PR_DOP', 'PR_DTH', 'PR_MYP', 'PR_CHK']
+products_list = ['PR_DEN_1', 'PR_DEN_2', 'PR_DEN_3_1', 'PR_DEN_3_2', 'PHA5021C', 'PR_FLU', 'PR_FSV', 'PR_FSVA', 'PR_GAST_3', 'PR_SYP', 'PR_HBSAG', 'PR_DOA_5_AMP', 'PR_DOA_5_KET', 'PR_DOA_4', 'PR_DOA_3', 'PR_DAM', 'PR_DBZ', 'PR_DCO', 'PR_DKE', 'PR_DME', 'PR_DMD', 'PR_DMDA', 'PR_DMO', 'PR_DOP', 'PR_DTH', 'PR_MYP', 'PR_CHK']
 
 # Innitiate the class by products
 
@@ -19,8 +19,8 @@ PR_FSVA = pc.ProDetect('PR_FSVA', 25, 2)
 PR_GAST_3 = pc.ProDetect('PR_GAST_3', 25, 1)
 PR_SYP = pc.ProDetect('PR_SYP', 25, 1)
 PR_HBSAG = pc.ProDetect('PR_HBSAG', 25, 1)
-PR_DOA_5_1 = pc.ProDetect('PR_DOA_5', 25, 0)
-PR_DOA_5_2= pc.ProDetect('PR_DOA_5', 25, 0)      # For all DOA combo
+PR_DOA_5_AMP = pc.ProDetect('PR_DOA_5_AMP', 25, 0)
+PR_DOA_5_KET= pc.ProDetect('PR_DOA_5_KET', 25, 0)      # For all DOA combo
 PR_DOA_4 = pc.ProDetect('PR_DOA_4', 25, 0)
 PR_DOA_3 = pc.ProDetect('PR_DOA_3', 25, 0)
 #PR_DOA_5_1 = pc.ProDetect('PR_DOA_5', 50, 0)    # For all DOA combo convert to single strip
@@ -45,14 +45,20 @@ def raw_materials_by_all_products():
     for item_code in products_list:
         print(eval(item_code).min_potential_produced())
 
+
+# To create dict for all the min summary of potetial raw material can produced for all product
 def raw_materials_by_all_products_dict():
     for item_code in products_list:
-        x = eval(item_code).min_potential_produced_all()
-    return x
+        summary_of_all_product = eval(item_code).min_potential_produced_all()
+    return summary_of_all_product
+
+
 # To access products raw material by input
 def raw_materials_by_input(Item_Code):
     print(Item_Code.min_potential_produced())
 
+
+# To access min potential can be prouduce by item code
 def apps():
     # Header
     terminal_size = os.get_terminal_size().columns # Access terminal columns size for print the header

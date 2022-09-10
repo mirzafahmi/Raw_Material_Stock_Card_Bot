@@ -17,7 +17,7 @@ class ProDetect:
 
     def raw_data(self):
         # Dynamically read the excel file from the name of the product
-        if (self.product_name == 'PR_DOA_4' or self.product_name == 'PR_DOA_3' or self.product_name == 'PR_DOA_5_1' or self.product_name == 'PR_DOA_5_2'):
+        if (self.product_name == 'PR_DOA_4' or self.product_name == 'PR_DOA_3' or self.product_name == 'PR_DOA_5_AMP' or self.product_name == 'PR_DOA_5_KET'):
             product_data = pd.read_excel(f'Raw_Data/F037_For_PR_DOA_5.xlsx', sheet_name = None)
         elif (self.product_name == 'PR_FSV' or self.product_name == 'PR_FSVA'):
             product_data = pd.read_excel(f'Raw_Data/F037_For_PR_FLU.xlsx', sheet_name = None)
@@ -161,17 +161,28 @@ class ProDetect:
         
         # Create variable for the products combo that shared the raw materials
         PR_DOA_combo = ['PR_DOA_5', 'PR_DOA_4', 'PR_DOA_3']
+        PR_DOA_5_variant = ['PR_DOA_5_AMP', 'PR_DOA_5_KET']
         PR_DEN_combo = ['PR_DEN_1', 'PR_DEN_2', 'PR_DEN_3_1', 'PR_DEN_3_2']
         PR_FLU_combo = ['PR_FLU', 'PR_RSV', 'PR_ADE', 'PR_FSV', 'PR_FSVA']
         
         # Filter out the components that are not use in the corresponding products
-        if self.product_name in PR_DOA_combo:
-            PR_DOA_combo.remove(self.product_name)
-            for key in list(potential_produced_product_raw_materials.keys()):
-                for combo in PR_DOA_combo:
-                    if combo in key:
-                        potential_produced_product_raw_materials.pop(key)
 
+        # Removing the product name in loop to flush out unnecessary component
+        # For PR-DOA-5 products
+        for combo in PR_DOA_combo:
+            if combo in self.product_name:
+                PR_DOA_combo.remove(combo)
+        
+        for combo in PR_DOA_combo:
+            for key in list(potential_produced_product_raw_materials.keys()):
+                if combo in key:
+                    potential_produced_product_raw_materials.pop(key)
+                if 'AMP' in self.product_name and 'KET' in key:
+                    potential_produced_product_raw_materials.pop(key)
+                if 'KET' in self.product_name and 'AMP' in key:
+                    potential_produced_product_raw_materials.pop(key)
+        
+        # For PR-DEN products
         if self.product_name == 'PR_DEN_1':
             PR_DEN_combo.remove(self.product_name)
             for key in list(potential_produced_product_raw_materials.keys()):
@@ -186,6 +197,7 @@ class ProDetect:
                     if combo in key:
                         potential_produced_product_raw_materials.pop(key)
         
+        # For PR-FLU/PR-FSV/PR-FSVA
         if self.product_name == 'PR_FLU':
             PR_FLU_combo.remove(self.product_name)
             for key in list(potential_produced_product_raw_materials.keys()):
@@ -239,7 +251,7 @@ class ProDetect:
 
 
 if __name__ == '__main__':
-    x = ProDetect('PR_FSV', 25, 2).raw_data()
+    x = ProDetect('PR_DOA_5_KET', 25, 0).raw_data()
     print(potential_produced_product_raw_materials)
     print(min_boxes_of_all_product)
     
