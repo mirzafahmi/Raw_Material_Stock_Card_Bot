@@ -39,7 +39,7 @@ def potential_finished_goods_based_on_raw_materials():
     work_sheet.update('H4:I4', f'Updated by RAW_MATERIAL_BOT at {timestamp()}')
     work_sheet.format('H4:I4', {'horizontalAlignment': 'CENTER' , 'textFormat': {'fontSize': 7, 'bold': True}})
     
-    print(f'All up to date on {dt_string}. Cheers. Disclaimer: This update still on the beta test stage, any bugs or problem, you may contact me.')
+    print(f'All up to date on {timestamp()}. Cheers. Disclaimer: This update still on the beta test stage, any bugs or problem, you may contact me.')
 
 
 
