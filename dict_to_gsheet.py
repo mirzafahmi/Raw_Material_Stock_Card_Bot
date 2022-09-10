@@ -34,7 +34,8 @@ def potential_finished_goods_based_on_raw_materials():
 
 if __name__ == '__main__':
     potential_finished_goods_based_on_raw_materials()
-    
-    
+    #print(raw_materials_by_all_products_dict())
+    for key, value in raw_materials_by_all_products_dict().items():
+        print(f'{key}: {raw_materials_by_all_products_dict()[key]}')
     
 

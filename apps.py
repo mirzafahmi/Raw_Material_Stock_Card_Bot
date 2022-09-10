@@ -3,7 +3,7 @@ import os
 from analysis_module import ProDetect_class as pc
 
 
-products_list = ['PR_DEN_1', 'PR_DEN_2', 'PR_DEN_3_1', 'PR_DEN_3_2', 'PHA5021C', 'PR_FLU', 'PR_FSV', 'PR_FSVA', 'PR_GAST_3', 'PR_SYP', 'PR_HBSAG', 'PR_DOA_5_1', 'PR_DOA_5_2', 'PR_DOA_4', 'PR_DOA_3', 'PR_DAM', 'PR_DBZ', 'PR_DKE', 'PR_DME', 'PR_DMD', 'PR_DMDA', 'PR_DMO', 'PR_DOP', 'PR_DTH', 'PR_MYP', 'PR_CHK']
+products_list = ['PR_DEN_1', 'PR_DEN_2', 'PR_DEN_3_1', 'PR_DEN_3_2', 'PHA5021C', 'PR_FLU', 'PR_FSV', 'PR_FSVA', 'PR_GAST_3', 'PR_SYP', 'PR_HBSAG', 'PR_DOA_5_1', 'PR_DOA_5_2', 'PR_DOA_4', 'PR_DOA_3', 'PR_DAM', 'PR_DBZ', 'PR_DCO', 'PR_DKE', 'PR_DME', 'PR_DMD', 'PR_DMDA', 'PR_DMO', 'PR_DOP', 'PR_DTH', 'PR_MYP', 'PR_CHK']
 
 # Innitiate the class by products
 
@@ -30,7 +30,7 @@ PR_DAM = pc.ProDetect('PR_DAM', 50, 0)
 PR_DBZ = pc.ProDetect('PR_DBZ', 50, 0)
 PR_DCO = pc.ProDetect('PR_DCO', 50, 0)
 PR_DME = pc.ProDetect('PR_DME', 50, 0)
-PR_DKE = pc.ProDetect('PR_DAM', 50, 0)
+PR_DKE = pc.ProDetect('PR_DKE', 50, 0)
 PR_DMD = pc.ProDetect('PR_DMD', 50, 0)
 PR_DMDA = pc.ProDetect('PR_DMDA', 50, 0)
 PR_DMO = pc.ProDetect('PR_DMO', 50, 0)

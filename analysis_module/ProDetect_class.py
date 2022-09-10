@@ -54,9 +54,9 @@ class ProDetect:
             
             # Fomula to calculate potential produced goods based on 'uncut sheet', it will read the last value in 'Received' column
             globals()[f'potential_produced_product_by_{trim_sheet}'] = globals()[f'product_{trim_sheet}']['Received'].iloc[-1] * product_tests_per_uncut_sheet / product_tests_per_box
-            globals()[f'potential_produced_product_by_{trim_sheet}_exp_date'] = globals()[f'product_{trim_sheet}']['Remarks'].iloc[-2]
+            globals()[f'potential_produced_product_by_{trim_sheet}_exp_date'] = globals()[f'product_{trim_sheet}']['Exp Date'].iloc[-2]
             
-            sheet_exp = pd.to_datetime(globals()[f'product_{trim_sheet}']['Remarks'].iloc[-2]).date()
+            sheet_exp = pd.to_datetime(globals()[f'product_{trim_sheet}']['Exp Date'].iloc[-2]).date()
             uncutsheet_expiry_date.append(sheet_exp)
     
 
@@ -88,7 +88,7 @@ class ProDetect:
 
             # Formula to calculate potential produced goods based on 'cap' and 'panel', it will read the last value in 'Received' column
             globals()[f'potential_produced_product_by_{trim_sheet}_caps'] = globals()[f'product_{trim_sheet}']['Caps Received'].iloc[-1] / product_tests_per_box
-            globals()[f'potential_produced_product_by_{trim_sheet}_caps_exp_date'] = globals()[f'product_{trim_sheet}']['Remarks'].iloc[-2]
+            globals()[f'potential_produced_product_by_{trim_sheet}_caps_exp_date'] = globals()[f'product_{trim_sheet}']['Exp Date'].iloc[-2]
 
             # Update the dict of corresponding component with another same component that has different lot number
             if (f'potential_produced_{self.product_name}_by_{trim_sheet}') in potential_produced_product_raw_materials:
@@ -99,7 +99,7 @@ class ProDetect:
 
             #potential_produced_product_raw_materials[f'potential_produced_{self.product_name}_by_{trim_sheet}_caps'] = {'Qty': globals()[f'potential_produced_product_by_{trim_sheet}_caps']}
             globals()[f'potential_produced_product_by_{trim_sheet}_panels'] = globals()[f'product_{trim_sheet}']['Panels Received'].iloc[-1] / product_tests_per_box
-            globals()[f'potential_produced_product_by_{trim_sheet}_panels_exp_date'] = globals()[f'product_{trim_sheet}']['Remarks'].iloc[-2]
+            globals()[f'potential_produced_product_by_{trim_sheet}_panels_exp_date'] = globals()[f'product_{trim_sheet}']['Exp Date'].iloc[-2]
             
             if (f'potential_produced_{self.product_name}_by_{trim_sheet}') in potential_produced_product_raw_materials:
                 potential_produced_product_raw_materials[f'potential_produced_{self.product_name}_by_{trim_sheet}_panels'].update({f'{sheet_number}': {'Qty': globals()[f'potential_produced_product_by_{trim_sheet}_panels'], 'Exp': globals()[f'potential_produced_product_by_{trim_sheet}_panels_exp_date']}})
@@ -119,7 +119,7 @@ class ProDetect:
             globals()[f'product_{trim_sheet}'].columns = globals()[f'product_{trim_sheet}_raw'].iloc[8]
             
             globals()[f'potential_produced_product_by_{trim_sheet}'] = globals()[f'product_{trim_sheet}']['Received'].iloc[-1] / number_of_buffer_per_box # different products have diffrent quantity buffer
-            globals()[f'potential_produced_product_by_{trim_sheet}_exp_date'] = globals()[f'product_{trim_sheet}']['Remarks'].iloc[-2]
+            globals()[f'potential_produced_product_by_{trim_sheet}_exp_date'] = globals()[f'product_{trim_sheet}']['Exp Date'].iloc[-2]
 
             # Update the dict of corresponding component with another same component that has different lot number
             if (f'potential_produced_{self.product_name}_by_{trim_sheet}') in potential_produced_product_raw_materials:
@@ -139,7 +139,7 @@ class ProDetect:
             globals()[f'product_{trim_sheet}'].columns = globals()[f'product_{trim_sheet}_raw'].iloc[8]
 
             globals()[f'potential_produced_product_by_{trim_sheet}'] = globals()[f'product_{trim_sheet}']['Received'].iloc[-1] / product_tests_per_box
-            globals()[f'potential_produced_product_by_{trim_sheet}_exp_date'] = globals()[f'product_{trim_sheet}']['Remarks'].iloc[-2]
+            globals()[f'potential_produced_product_by_{trim_sheet}_exp_date'] = globals()[f'product_{trim_sheet}']['Exp Date'].iloc[-2]
             
             # Update the dict of corresponding component with another same component that has different lot number
             if (f'potential_produced_{self.product_name}_by_{trim_sheet}') in potential_produced_product_raw_materials:
@@ -239,6 +239,7 @@ class ProDetect:
 
 
 if __name__ == '__main__':
-    x = ProDetect('PR_DOA_5', 25, 0).raw_data()
+    x = ProDetect('PR_FSV', 25, 2).raw_data()
     print(potential_produced_product_raw_materials)
+    print(min_boxes_of_all_product)
     
