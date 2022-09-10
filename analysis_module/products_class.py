@@ -4,27 +4,31 @@ import os
 import re
 import math
 
+
 terminal_size = os.get_terminal_size().columns # Access terminal columns size for print the header
 
-class ProDetect:
+
+class Products:
     global min_boxes_of_all_product
     min_boxes_of_all_product = {}
     
+
     def __init__(self, product_name, tests_per_box, number_of_buffer_per_box):
         self.product_name = product_name
         self.tests_per_box = tests_per_box
         self.number_of_buffer_per_box = number_of_buffer_per_box
 
+
     def raw_data(self):
         # Dynamically read the excel file from the name of the product
-        if (self.product_name == 'PR_DOA_4' or self.product_name == 'PR_DOA_3' or self.product_name == 'PR_DOA_5_AMP' or self.product_name == 'PR_DOA_5_KET'):
-            product_data = pd.read_excel(f'Raw_Data/F037_For_PR_DOA_5.xlsx', sheet_name = None)
-        elif (self.product_name == 'PR_FSV' or self.product_name == 'PR_FSVA'):
-            product_data = pd.read_excel(f'Raw_Data/F037_For_PR_FLU.xlsx', sheet_name = None)
-        elif (self.product_name == 'PR_DEN_1' or self.product_name == 'PR_DEN_2' or self.product_name == 'PR_DEN_3_1' or self.product_name == 'PR_DEN_3_2'):
-            product_data = pd.read_excel(f'Raw_Data/F037_For_PR_DEN.xlsx', sheet_name = None)
+        if (self.product_name == 'PRODUCT_L_4' or self.product_name == 'PRODUCT_L_3' or self.product_name == 'PRODUCT_L_5_AMP' or self.product_name == 'PRODUCT_L_5_KET'):
+            product_data = pd.read_excel(f'Raw_Data/PRODUCT_L.xlsx', sheet_name = None)
+        elif (self.product_name == 'PRODUCT_O_1' or self.product_name == 'PRODUCT_O_2' or self.product_name == 'PRODUCT_O_3'):
+            product_data = pd.read_excel(f'Raw_Data/PRODUCT_O.xlsx', sheet_name = None)
+        elif (self.product_name == 'PRODUCT_F_1' or self.product_name == 'PRODUCT_F_2' or self.product_name == 'PRODUCT_F_3_1' or self.product_name == 'PRODUCT_F_3_2'):
+            product_data = pd.read_excel(f'Raw_Data/PRODUCT_F.xlsx', sheet_name = None)
         else:
-            product_data = pd.read_excel(f'Raw_Data/F037_For_{self.product_name}.xlsx', sheet_name = None)
+            product_data = pd.read_excel(f'Raw_Data/{self.product_name}.xlsx', sheet_name = None)
 
         # Get the name of the sheet to differentiate between uncut_sheet components and others as some products has combinations thus need different function for the uncut_sheet sheet
         sheet_name = list(product_data.keys())
@@ -40,11 +44,15 @@ class ProDetect:
         global potential_produced_product_raw_materials
         potential_produced_product_raw_materials = {}
         uncutsheet_expiry_date = []
-        # Create for loop to dynamically go through all the uncut_sheet sheet
 
+        # Create for loop to dynamically go through all the uncut_sheet sheet
         for sheet in all_uncut_sheets:
-            trim_sheet = sheet.strip('_1_2')
-            sheet_number = ' '.join(map(str, re.findall(r'\d$', sheet)))
+            # Trim the number at end of the sheet to merge it with other sheets of same components
+            trim_sheet = re.sub('_\d$', '', sheet)
+
+            # Naming the key of the dict with number from end of the sheet name
+            sheet_number = ' '.join(map(str, re.findall(r'\d$', sheet))) 
+            
             # Globals() made the dynamic variable name possible
             globals()[f'product_{trim_sheet}_raw'] = product_data[f'{sheet}']
             
@@ -56,10 +64,10 @@ class ProDetect:
             globals()[f'potential_produced_product_by_{trim_sheet}'] = globals()[f'product_{trim_sheet}']['Received'].iloc[-1] * product_tests_per_uncut_sheet / product_tests_per_box
             globals()[f'potential_produced_product_by_{trim_sheet}_exp_date'] = globals()[f'product_{trim_sheet}']['Exp Date'].iloc[-2]
             
+            # Convert 'exp date' into datetime format 
             sheet_exp = pd.to_datetime(globals()[f'product_{trim_sheet}']['Exp Date'].iloc[-2]).date()
             uncutsheet_expiry_date.append(sheet_exp)
     
-
             # Update the dict of corresponding component with another same component that has different lot number
             if (f'potential_produced_{self.product_name}_by_{trim_sheet}') in potential_produced_product_raw_materials:
                 potential_produced_product_raw_materials[f'potential_produced_{self.product_name}_by_{trim_sheet}'].update({f'{sheet_number}': {'Qty': globals()[f'potential_produced_product_by_{trim_sheet}'], 'Exp': globals()[f'potential_produced_product_by_{trim_sheet}_exp_date']}})
@@ -67,9 +75,11 @@ class ProDetect:
                 potential_produced_product_raw_materials[f'potential_produced_{self.product_name}_by_{trim_sheet}'] = {f'{sheet_number}': {'Qty': globals()[f'potential_produced_product_by_{trim_sheet}'], 'Exp': globals()[f'potential_produced_product_by_{trim_sheet}_exp_date']}}
         
 
-
         for sheet in all_cassettes:
-            trim_sheet = sheet.strip('_1_2')
+            # Trim the number at end of the sheet to merge it with other sheets of same components
+            trim_sheet = re.sub('_\d$', '', sheet)
+
+            # Naming the key of the dict with number from end of the sheet name
             sheet_number = ' '.join(map(str, re.findall(r'\d$', sheet)))
             
             # Globals() made the dynamic variable name possible
@@ -90,14 +100,13 @@ class ProDetect:
             globals()[f'potential_produced_product_by_{trim_sheet}_caps'] = globals()[f'product_{trim_sheet}']['Caps Received'].iloc[-1] / product_tests_per_box
             globals()[f'potential_produced_product_by_{trim_sheet}_caps_exp_date'] = globals()[f'product_{trim_sheet}']['Exp Date'].iloc[-2]
 
+
             # Update the dict of corresponding component with another same component that has different lot number
             if (f'potential_produced_{self.product_name}_by_{trim_sheet}') in potential_produced_product_raw_materials:
                 potential_produced_product_raw_materials[f'potential_produced_{self.product_name}_by_{trim_sheet}_caps'].update({f'{sheet_number}': {'Qty': globals()[f'potential_produced_product_by_{trim_sheet}_caps'], 'Exp': globals()[f'potential_produced_product_by_{trim_sheet}_caps_exp_date']}})
             else:
                 potential_produced_product_raw_materials[f'potential_produced_{self.product_name}_by_{trim_sheet}_caps'] = {f'{sheet_number}': {'Qty': globals()[f'potential_produced_product_by_{trim_sheet}_caps'], 'Exp': globals()[f'potential_produced_product_by_{trim_sheet}_caps_exp_date']}}
         
-
-            #potential_produced_product_raw_materials[f'potential_produced_{self.product_name}_by_{trim_sheet}_caps'] = {'Qty': globals()[f'potential_produced_product_by_{trim_sheet}_caps']}
             globals()[f'potential_produced_product_by_{trim_sheet}_panels'] = globals()[f'product_{trim_sheet}']['Panels Received'].iloc[-1] / product_tests_per_box
             globals()[f'potential_produced_product_by_{trim_sheet}_panels_exp_date'] = globals()[f'product_{trim_sheet}']['Exp Date'].iloc[-2]
             
@@ -108,7 +117,10 @@ class ProDetect:
             
 
         for sheet in all_buffers:
-            trim_sheet = sheet.strip('_1_2')
+            # Trim the number at end of the sheet to merge it with other sheets of same components
+            trim_sheet = re.sub('_\d$', '', sheet)
+            
+            # Naming the key of the dict with number from end of the sheet name
             sheet_number = ' '.join(map(str, re.findall(r'\d$', sheet)))
 
             # Globals() made the dynamic variable name possible
@@ -128,7 +140,10 @@ class ProDetect:
                 potential_produced_product_raw_materials[f'potential_produced_{self.product_name}_by_{trim_sheet}'] = {f'{sheet_number}': {'Qty': globals()[f'potential_produced_product_by_{trim_sheet}'], 'Exp': globals()[f'potential_produced_product_by_{trim_sheet}_exp_date']}}
 
         for sheet in other_components:
-            trim_sheet = sheet.strip('_1_2')
+            # Trim the number at end of the sheet to merge it with other sheets of same components
+            trim_sheet = re.sub('_\d$', '', sheet)
+
+            # Naming the key of the dict with number from end of the sheet name
             sheet_number = ' '.join(map(str, re.findall(r'\d$', sheet)))
 
             # Globals() made the dynamic variable name possible
@@ -160,20 +175,19 @@ class ProDetect:
             potential_produced_product_raw_materials[f'{key}'].update({'Total Qty': math.floor(sum(total_qty))})
         
         # Create variable for the products combo that shared the raw materials
-        PR_DOA_combo = ['PR_DOA_5', 'PR_DOA_4', 'PR_DOA_3']
-        PR_DOA_5_variant = ['PR_DOA_5_AMP', 'PR_DOA_5_KET']
-        PR_DEN_combo = ['PR_DEN_1', 'PR_DEN_2', 'PR_DEN_3_1', 'PR_DEN_3_2']
-        PR_FLU_combo = ['PR_FLU', 'PR_RSV', 'PR_ADE', 'PR_FSV', 'PR_FSVA']
+        PRODUCT_L_combo = ['PRODUCT_L_5', 'PRODUCT_L_4', 'PRODUCT_L_3']
+        PRODUCT_F_combo = ['PRODUCT_F_1', 'PRODUCT_F_2', 'PRODUCT_F_3_1', 'PRODUCT_F_3_2']
+        PRODUCT_O_1_combo = ['PRODUCT_O_1', 'C1', 'C2', 'PRODUCT_O_2', 'PRODUCT_O_3']
         
         # Filter out the components that are not use in the corresponding products
 
         # Removing the product name in loop to flush out unnecessary component
         # For PR-DOA-5 products
-        for combo in PR_DOA_combo:
+        for combo in PRODUCT_L_combo:
             if combo in self.product_name:
-                PR_DOA_combo.remove(combo)
+                PRODUCT_L_combo.remove(combo)
         
-        for combo in PR_DOA_combo:
+        for combo in PRODUCT_L_combo:
             for key in list(potential_produced_product_raw_materials.keys()):
                 if combo in key:
                     potential_produced_product_raw_materials.pop(key)
@@ -183,43 +197,61 @@ class ProDetect:
                     potential_produced_product_raw_materials.pop(key)
         
         # For PR-DEN products
-        if self.product_name == 'PR_DEN_1':
-            PR_DEN_combo.remove(self.product_name)
+        if self.product_name == 'PRODUCT_F_1':
+            PRODUCT_F_combo.remove(self.product_name)
             for key in list(potential_produced_product_raw_materials.keys()):
-                for combo in PR_DEN_combo:
+                for combo in PRODUCT_F_combo:
                     if combo in key:
                         potential_produced_product_raw_materials.pop(key)
         
-        if self.product_name == 'PR_DEN_2':
-            PR_DEN_combo.remove(self.product_name)
+        if self.product_name == 'PRODUCT_F_2':
+            PRODUCT_F_combo.remove(self.product_name)
             for key in list(potential_produced_product_raw_materials.keys()):
-                for combo in PR_DEN_combo:
+                for combo in PRODUCT_F_combo:
                     if combo in key:
                         potential_produced_product_raw_materials.pop(key)
         
-        # For PR-FLU/PR-FSV/PR-FSVA
-        if self.product_name == 'PR_FLU':
-            PR_FLU_combo.remove(self.product_name)
+        if self.product_name == 'PRODUCT_F_3_1' or self.product_name == 'PRODUCT_F_3_2':
             for key in list(potential_produced_product_raw_materials.keys()):
-                for combo in PR_FLU_combo:
+                for combo in PRODUCT_F_combo:
+                    if 'F_1_Cassette' in key or 'F_2_Cassette' in key:
+                        try:
+                            potential_produced_product_raw_materials.pop(key)
+                        except:
+                            pass
+        
+        # For PRODUCT_O_1 combo
+        if self.product_name == 'PRODUCT_O_1':
+            PRODUCT_O_1_combo.remove(self.product_name)
+            for key in list(potential_produced_product_raw_materials.keys()):
+                for combo in PRODUCT_O_1_combo:
                     if combo in key:
                         try:
                             potential_produced_product_raw_materials.pop(key)
                         except:
                             pass
 
-        if self.product_name == 'PR_FSV':
-            PR_FLU_combo.remove(self.product_name)
-            PR_FLU_combo.remove('PR_RSV')
-            PR_FLU_combo.remove('PR_FLU')
+        if self.product_name == 'PRODUCT_O_2':
+            PRODUCT_O_1_combo.remove(self.product_name)
+            PRODUCT_O_1_combo.remove('C1')
+            PRODUCT_O_1_combo.remove('PRODUCT_O_1')
             for key in list(potential_produced_product_raw_materials.keys()):
-                for combo in PR_FLU_combo:
-                    if combo in key:
+                for combo in PRODUCT_O_1_combo:
+                    if combo in key or 'O_1_Cassette' in key:
                         try:
                             potential_produced_product_raw_materials.pop(key)
                         except:
                             pass
-
+        
+        if self.product_name == 'PRODUCT_O_3':
+            for key in list(potential_produced_product_raw_materials.keys()):
+                for combo in PRODUCT_O_1_combo:
+                    if 'O_1_Cassette' in key or 'O_2_Cassette' in key:
+                        try:
+                            potential_produced_product_raw_materials.pop(key)
+                        except:
+                            pass
+        
         # Assigning 'Total Qty' value to its own variable 
         total_qty_dict = {key: list(val.values())[-1] for key, val in potential_produced_product_raw_materials.items()}
         
@@ -251,7 +283,7 @@ class ProDetect:
 
 
 if __name__ == '__main__':
-    x = ProDetect('PR_DOA_5_KET', 25, 0).raw_data()
+    x = Products('PRODUCT_O_3', 25, 2).raw_data()
     print(potential_produced_product_raw_materials)
     print(min_boxes_of_all_product)
     

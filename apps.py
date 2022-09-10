@@ -1,44 +1,42 @@
 import sys
 import os
-from analysis_module import ProDetect_class as pc
+from analysis_module import products_class as pc
 
 
-products_list = ['PR_DEN_1', 'PR_DEN_2', 'PR_DEN_3_1', 'PR_DEN_3_2', 'PHA5021C', 'PR_FLU', 'PR_FSV', 'PR_FSVA', 'PR_GAST_3', 'PR_SYP', 'PR_HBSAG', 'PR_DOA_5_AMP', 'PR_DOA_5_KET', 'PR_DOA_4', 'PR_DOA_3', 'PR_DAM', 'PR_DBZ', 'PR_DCO', 'PR_DKE', 'PR_DME', 'PR_DMD', 'PR_DMDA', 'PR_DMO', 'PR_DOP', 'PR_DTH', 'PR_MYP', 'PR_CHK']
+products_list = ['PRODUCT_F_1', 'PRODUCT_F_2', 'PRODUCT_F_3_1', 'PRODUCT_F_3_2', 'PRODUCT_A', 'PRODUCT_O_1', 'PRODUCT_O_2', 'PRODUCT_O_3', 'PRODUCT_P', 'PRODUCT_S', 'PRODUCT_Q', 'PRODUCT_L_5_AMP', 'PRODUCT_L_5_KET', 'PRODUCT_L_4', 'PRODUCT_L_3', 'PRODUCT_C', 'PRODUCT_D', 'PRODUCT_E', 'PRODUCT_G', 'PRODUCT_J', 'PRODUCT_H', 'PRODUCT_I', 'PRODUCT_K', 'PRODUCT_M', 'PRODUCT_N', 'PRODUCT_R', 'PRODUCT_B']
 
 # Innitiate the class by products
 
-# Product_Code = ProDetect('product_code', tests_per_box, number_of_buffer_per_box)
-PR_DEN_1 = pc.ProDetect('PR_DEN_1', 25, 1)          # For all dengue products as they share materials
-PR_DEN_2 = pc.ProDetect('PR_DEN_2', 25, 1)
-PR_DEN_3_1 = pc.ProDetect('PR_DEN_3_1', 10, 1)
-PR_DEN_3_2 = pc.ProDetect('PR_DEN_3_2', 25, 1)
-PHA5021C = pc.ProDetect('PHA5021C', 40, 0)
-PR_FLU = pc.ProDetect('PR_FLU', 25, 2)          # For all PR_FLU, PR_FSV and PR_FSVA products as they share materials
-PR_FSV = pc.ProDetect('PR_FSV', 25, 2)
-PR_FSVA = pc.ProDetect('PR_FSVA', 25, 2)
-PR_GAST_3 = pc.ProDetect('PR_GAST_3', 25, 1)
-PR_SYP = pc.ProDetect('PR_SYP', 25, 1)
-PR_HBSAG = pc.ProDetect('PR_HBSAG', 25, 1)
-PR_DOA_5_AMP = pc.ProDetect('PR_DOA_5_AMP', 25, 0)
-PR_DOA_5_KET= pc.ProDetect('PR_DOA_5_KET', 25, 0)      # For all DOA combo
-PR_DOA_4 = pc.ProDetect('PR_DOA_4', 25, 0)
-PR_DOA_3 = pc.ProDetect('PR_DOA_3', 25, 0)
-#PR_DOA_5_1 = pc.ProDetect('PR_DOA_5', 50, 0)    # For all DOA combo convert to single strip
+# Product_Code = Products('product_code', tests_per_box, number_of_buffer_per_box)
+PRODUCT_F_1 = pc.Products('PRODUCT_F_1', 25, 1)          # For all F products as they share materials
+PRODUCT_F_2 = pc.Products('PRODUCT_F_2', 25, 1)
+PRODUCT_F_3_1 = pc.Products('PRODUCT_F_3_1', 10, 1)
+PRODUCT_F_3_2 = pc.Products('PRODUCT_F_3_2', 25, 1)
+PRODUCT_A = pc.Products('PRODUCT_A', 40, 0)
+PRODUCT_O_1 = pc.Products('PRODUCT_O_1', 25, 2)          # For all PRODUCT_O_1, PRODUCT_O_2 and PRODUCT_O_3 products as they share materials
+PRODUCT_O_2 = pc.Products('PRODUCT_O_2', 25, 2)
+PRODUCT_O_3 = pc.Products('PRODUCT_O_3', 25, 2)
+PRODUCT_P = pc.Products('PRODUCT_P', 25, 1)
+PRODUCT_S = pc.Products('PRODUCT_S', 25, 1)
+PRODUCT_Q = pc.Products('PRODUCT_Q', 25, 1)
+PRODUCT_L_5_AMP = pc.Products('PRODUCT_L_5_AMP', 25, 0)
+PRODUCT_L_5_KET= pc.Products('PRODUCT_L_5_KET', 25, 0)      
+PRODUCT_L_4 = pc.Products('PRODUCT_L_4', 25, 0)
+PRODUCT_L_3 = pc.Products('PRODUCT_L_3', 25, 0)
 
-# For all single strip DOA test
-PR_DAM = pc.ProDetect('PR_DAM', 50, 0)
-PR_DBZ = pc.ProDetect('PR_DBZ', 50, 0)
-PR_DCO = pc.ProDetect('PR_DCO', 50, 0)
-PR_DME = pc.ProDetect('PR_DME', 50, 0)
-PR_DKE = pc.ProDetect('PR_DKE', 50, 0)
-PR_DMD = pc.ProDetect('PR_DMD', 50, 0)
-PR_DMDA = pc.ProDetect('PR_DMDA', 50, 0)
-PR_DMO = pc.ProDetect('PR_DMO', 50, 0)
-PR_DOP = pc.ProDetect('PR_DOP', 50, 0)
-PR_DTH = pc.ProDetect('PR_DTH', 50, 0)
+PRODUCT_C = pc.Products('PRODUCT_C', 50, 0)
+PRODUCT_D = pc.Products('PRODUCT_D', 50, 0)
+PRODUCT_E = pc.Products('PRODUCT_E', 50, 0)
+PRODUCT_J = pc.Products('PRODUCT_J', 50, 0)
+PRODUCT_G = pc.Products('PRODUCT_G', 50, 0)
+PRODUCT_H = pc.Products('PRODUCT_H', 50, 0)
+PRODUCT_I = pc.Products('PRODUCT_I', 50, 0)
+PRODUCT_K = pc.Products('PRODUCT_K', 50, 0)
+PRODUCT_M = pc.Products('PRODUCT_M', 50, 0)
+PRODUCT_N = pc.Products('PRODUCT_N', 50, 0)
 
-PR_MYP = pc.ProDetect('PR_MYP', 25, 1)
-PR_CHK = pc.ProDetect('PR_CHK', 25, 1)
+PRODUCT_R = pc.Products('PRODUCT_R', 25, 1)
+PRODUCT_B = pc.Products('PRODUCT_B', 25, 1)
 
 # To access all products raw material
 def raw_materials_by_all_products():
@@ -71,10 +69,8 @@ def apps():
         raw_materials_by_input(eval(item_code_input)) # Use eval to strip the string and convert into expression
     elif(item_code_input == 'ALL'):
         raw_materials_by_all_products()
-    elif (item_code_input == 'PR_DOA_5_1'):            # Convert raw material form PR-DOA-5 into single strip
-        raw_materials_by_input(eval(item_code_input))
     else:
-        print('Please enter correct product code in as this format: PR-XXXX')
+        print('Please enter correct product code in as this format: PRODUCT_X')
 
 if __name__ == '__main__':
     apps()

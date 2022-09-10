@@ -1,6 +1,6 @@
 
 
-# Mediven Raw Material Stock Card Summary
+# Raw Material Stock Card Summary
 
 
 ## Table of Contents
@@ -12,8 +12,7 @@
 
 ## General Info
 
-This project is created on self-iniative to provide the summary of raw material available in stock for ease the process of sales person to provide the stock level to the clients. This program will take ```Item Code``` input and will summarize the minimum amount ```(in box)``` that can be produce. Then, this output will be use to automatically update the ```Finished Goods Stock Card``` in the Google sheet. Google Sheet/Microsoft Excel will be act as data entry and client interface. Besides, this project will ease the process of procurement and maintaining the 
-ex-stock level.
+This project is based on original version that need to be modified to remove P&C info in the code or excel sheet. It is created on self-iniative to provide the summary of raw material available in stock for ease the process of sales person to provide the stock level to the clients. This program will take ```Item Code``` input and will summarize the minimum amount ```(in box)``` that can be produce. Then, this output will be use to automatically update the ```Finished Goods Stock Card``` in the [Google Sheet](#https://docs.google.com/spreadsheets/d/1ezcUrRdJzcmaxaFpOy8yHAotnIviLPi76QsdPMvRzsg/edit?usp=sharing). Google Sheet/Microsoft Excel will be act as data entry and client interface. Besides, this project will ease the process of procurement and maintaining the ex-stock level. 
 
 ## Packages Involved
 
@@ -41,17 +40,3 @@ This project depend on:
 2. Run ```dict_to_gsheet.py```
 3. The program will update the google sheet automatically
 
-
-## To-do/add-on features
-
-* Modify the output of ```Limiting Factor Component``` to be tailored to the type of Item Code (For examples: PR-DOA-5 components are shared with PR-DOA-4 and PR-DOA-3, thus unrelated to the ```Item Code``` input will be not showed in the output).
-
-    <label for="file">Progress:  </label> ![](https://geps.dev/progress/100)
-
-* Integrated the output of ```ALL``` input into Finished Goods Stock Card in Google sheet.
-
-    <label for="file">Progress:  </label> ![](https://geps.dev/progress/100)
-
-* Differentiate between two type of default PR-DOA-5 (variant of AMP and KET)
-
-    <label for="file">Progress:  </label> ![](https://geps.dev/progress/100)

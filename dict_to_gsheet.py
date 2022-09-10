@@ -2,7 +2,9 @@ from apps import raw_materials_by_all_products_dict
 import warnings
 import gspread
 from datetime import datetime
+from pathlib import Path
 
+sa_path = str(Path.home() / 'Downloads' / 'service_account.json')
 
 warnings.filterwarnings('ignore')
 
@@ -15,9 +17,9 @@ def timestamp():
 
 
 def potential_finished_goods_based_on_raw_materials():
-    sa = gspread.service_account()
-    beta_test = sa.open('stock_card_beta_test')
-    work_sheet = beta_test.worksheet('PRODUCT LIST')
+    sa = gspread.service_account(filename=sa_path)
+    beta_test = sa.open('Stock_Card')
+    work_sheet = beta_test.worksheet('PRODUCT_LIST')
 
     timestamp()
     print(f'Obtaining and summarize data from excel sheet at {timestamp()}')
@@ -32,25 +34,24 @@ def potential_finished_goods_based_on_raw_materials():
         for key, value in potential_produced_by_raw_material.items():
             if item == key:
                 cell = work_sheet.find(item)
-                work_sheet.update_cell(cell.row, cell.col + 11, potential_produced_by_raw_material[key]['Total Qty'])
-                work_sheet.update_cell(cell.row, cell.col + 12, potential_produced_by_raw_material[key]['Exp'])
+                work_sheet.update_cell(cell.row, cell.col + 6, potential_produced_by_raw_material[key]['Total Qty'])
+                work_sheet.update_cell(cell.row, cell.col + 7, potential_produced_by_raw_material[key]['Exp'])
                 
                 print(f'Update complete for {item}')
 
     update_times = datetime.now()
     dt_string = update_times.strftime('%d/%m/%Y %H:%M:%S')
 
-    work_sheet.update('M9:N9', f'Updated by RAW_MATERIAL_BOT at {timestamp()}')
-    work_sheet.format('M9:N9', {'horizontalAlignment': 'CENTER' , 'textFormat': {'fontSize': 12, 'bold': True}})
+    work_sheet.update('H4:I4', f'Updated by RAW_MATERIAL_BOT at {timestamp()}')
+    work_sheet.format('H4:I4', {'horizontalAlignment': 'CENTER' , 'textFormat': {'fontSize': 9, 'bold': True}})
     
-    print(f'All up to date on {dt_string}. Cheers. Disclaimer: This update still on the beta test stage, any bugs or problem, you may contact HQ.')
+    print(f'All up to date on {dt_string}. Cheers. Disclaimer: This update still on the beta test stage, any bugs or problem, you may contact me.')
 
 
 
 if __name__ == '__main__':
     potential_finished_goods_based_on_raw_materials()
-
-
+    
     #   Debugging code
     #print(raw_materials_by_all_products_dict())
     '''for key, value in raw_materials_by_all_products_dict().items():
