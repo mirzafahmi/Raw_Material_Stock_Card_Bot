@@ -25,7 +25,7 @@ This project depend on:
 
 #### 2. Custom Modules/Packages
 
-* ProDetect_class.py
+* product_class.py
 
 
 ## Setup    
